@@ -1,0 +1,4 @@
+#!/bin/bash
+printf '\e[8;50;130t'
+clear
+python3 main.py $@
