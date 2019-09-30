@@ -98,6 +98,7 @@ class SetGame(object):
     def findSets(self):
 
         visited = set()
+        self.showingSets = set()
 
         for first in self.showingCards:
             for second in self.showingCards:
@@ -171,11 +172,17 @@ class SetGame(object):
         assert(len(IDs) == 3)
         cardOne, cardTwo, cardThree = self.showingCards[IDs[0]], self.showingCards[IDs[1]], self.showingCards[IDs[2]]
         trip = tuple(sorted([cardOne, cardTwo, cardThree]))
-
+        self.numLines += 1
         if (trip in self.showingSets):
             return True
 
         return False
+
+    def getOneHintSet(self):
+        assert (len(self.showingSets) > 0)
+        randomInt = random.randint(0, len(self.showingSets)-1 )
+        ret = list(self.showingSets)[randomInt]
+        return ret
 
     # function obtained from this stack overflow post:
     # https://stackoverflow.com/questions/19596750/is-there-a-way-to-clear-your-printed-text-in-python

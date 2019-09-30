@@ -4,8 +4,13 @@ from game import SetGame
 
 
 def intro():
-    print ("Welcome to the card game Set. \n")
-    print ("Each card shown has an identification number beneath the card. \n\n")
+    print ("Welcome to the card game Set. Written by Zaya Battogtokh \n")
+    print ("For a great experience, DO NOT resize your terminal window.")
+    print ("Please read this Wikipedia page for gameplay: https://en.wikipedia.org/wiki/Set_(card_game)")
+    print ("Cards have unique identification numbers.")
+    print ("When promped, please enter the IDs (space delimited) of three cards that form a set.")
+    print ("Enter 'hint' or 'draw [number]' at the prompt to either reveal a set or draw more cards.")
+    print ("Enter 'q' or 'quit' at the prompt to quit the game. Enjoy! \n\n")
 
 def representsInt(s):
     val = None
@@ -24,6 +29,13 @@ def main():
     game = SetGame()
     game.showCards()
     numSetsShowing = game.findSets()
+
+    def showBriefMessage(message):
+        game.delete_last_line()
+        print (message)
+        time.sleep(1.5)
+        game.delete_last_line()
+
     while (numSetsShowing < 0):
         game = SetGame()
         game.showCards()
@@ -31,31 +43,35 @@ def main():
     while (game.numCardsRemaining() > 0 and numSetsShowing > 0 and quit == False):
         validInput = False
         IDs = []
+        hintSet = game.getOneHintSet()
         while (validInput is False):
-            userInput = input("Enter the ID numbers (space delimited) of three cards that form a set: ")
+            userInput = input("Enter the ID numbers: ")
             if userInput == "quit" or userInput == "q":
                 quit = True
                 break
+
+            if userInput.lower() == "hint":
+                showBriefMessage(hintSet)
+                continue
+
             splitWords = userInput.split()
+            # if splitWords[0] == "draw":
+            #     if len(splitWords) > 1:
+
+
             if (len(splitWords) == 3):
                 for word in splitWords:
                     val = representsInt(word)
                     if (val is not None and val >= 0 and val < len(game.showingCards)) :
                         IDs.append(val)
             else:
-                game.delete_last_line()
-                print ("Invalid input. Please try again ...")
-                time.sleep(1.5)
-                game.delete_last_line()
+                showBriefMessage("Invalid input. Please try again ...")
                 continue
 
             if len(IDs) == 3:
                 break
             else:
-                game.delete_last_line()
-                print ("Invalid input. Enter three IDs. Please try again ...")
-                time.sleep(1.5)
-                game.delete_last_line()
+                showBriefMessage ("Invalid input. Enter three IDs. Please try again ...")
                 continue
 
         if (quit):
@@ -64,10 +80,7 @@ def main():
 
         isSet = game.validateSet(IDs)
         if (isSet):
-            game.delete_last_line()
-            print ("Congratulations! That was a set! ")
-            time.sleep(1.5)
-            game.delete_last_line()
+            showBriefMessage ("Congratulations! That was a set! ")
             for index in IDs:
                 game.replaceCardAt(index)
             numSetsShowing = game.findSets()
@@ -75,12 +88,8 @@ def main():
             game.showGameStatus()
             continue
         else:
-            game.delete_last_line()
-            print ("That was not a set! Please try again ...")
-            time.sleep(1.5)
-            game.delete_last_line()
+            showBriefMessage ("That was not a set! Please try again ...")
             continue
-
 
 if (__name__ == '__main__'):
     main()
