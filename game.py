@@ -7,6 +7,7 @@ from colorama import Style
 from colorama import Back
 import random
 
+# Variations of colors possible
 class Color(Enum):
     Red = 1
     Green = 2
@@ -20,7 +21,7 @@ class Color(Enum):
         else:
             return Fore.MAGENTA + Back.WHITE
 
-
+# Variations of shapes possible
 class Shape(Enum):
     Diamond = 1
     Squiggle = 2
@@ -34,11 +35,13 @@ class Shape(Enum):
         else:
             return ["●", "◑", "◯", ]
 
+# Variations of shadings possible
 class Shading(Enum):
     Solid = 1
     Striped = 2
     Open = 3
 
+# Variations of number of shapes possible
 class Number(Enum):
     One = 1
     Two = 2
@@ -50,8 +53,6 @@ class Number(Enum):
             return '   * *   '
         else:
             return ' *  *  * '
-
-# Variations of shapes possible
 
 class Card(object):
     def __init__(self, shape, shading, color, number):
@@ -79,6 +80,7 @@ class SetGame(object):
     def __init__(self):
         colorama.init(autoreset=True)
         self.deck = []
+        self.score = 0
         self.showingSets = set()
         self.showingCards = []
         #number of lines used to display game information (cards + deck), used to clear output appropriately
@@ -95,11 +97,11 @@ class SetGame(object):
     def numCardsRemaining(self):
         return len(self.showingCards) + len(self.deck)
 
+    # Find sets among displayed cards
     def findSets(self):
 
         visited = set()
         self.showingSets = set()
-
         for first in self.showingCards:
             for second in self.showingCards:
                 if (first != second and (first, second) not in visited and (second, first) not in visited):
@@ -144,6 +146,8 @@ class SetGame(object):
 
     def replaceCardAt(self, index):
         assert(index >= 0 and index < len(self.showingCards))
+        if (len(self.deck) == 0):
+            return
         newCard = self.deck.pop()
         self.showingCards[index] = newCard
 
@@ -163,14 +167,24 @@ class SetGame(object):
             self.displayCards(i, min(i+idealNumInRow, numberOfShowingCards-1))
             i += idealNumInRow + 1
 
-
+    def updateScore(self, value):
+        self.score += value
 
     # improve card status design later
-    def showGameStatus(self):
+    def showGameStatus(self, update=False):
+        if (update):
+            n = 0
+            while (n < 4):
+                self.delete_last_line()
+                n += 1
+            self.numLines -= 4
+
+
         print ("⟪⟪⟪     ɢᴀᴍᴇ ꜱᴛᴀᴛᴜꜱ     ⟫⟫⟫")
         print (f'    ᴄᴀʀᴅꜱ ʀᴇᴍᴀɪɴɪɴɢ: {len(self.deck) + len(self.showingCards)}')
+        print (f'          𝚂𝙲𝙾𝚁𝙴: {self.score}')
         print ('\n', end="")
-        self.numLines += 3
+        self.numLines += 4
 
     def validateSet(self, IDs):
         assert(len(IDs) == 3)

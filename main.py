@@ -54,22 +54,28 @@ def main():
     while (game.numCardsRemaining() > 0 and quit == False):
         validInput = False
         IDs = []
-        hintSet = game.getOneHintSet()
         while (validInput is False):
+            hintSet = game.getOneHintSet()
             userInput = input("Enter the ID numbers: ")
             if userInput == "quit" or userInput == "q":
                 quit = True
                 break
 
             if userInput.lower() == "hint":
+                game.updateScore(-1)
+                message = ""
                 if hintSet is None:
-                    showBriefMessage("No sets can be formed! Please draw more cards.", length=2.5)
-                    continue
-                showBriefMessage(hintSet)
+                    message = "No sets can be formed! Please draw more cards."
+                else:
+                    message = hintSet
+
+                showBriefMessage(message)
+                game.showGameStatus(update=True)
                 continue
 
             if userInput.lower() == "draw":
                 if (numSetsShowing > 0):
+                    game.updateScore(-1)
                     showBriefMessage("Cannot draw more cards when a set exists among existing cards!", length=2.5)
                     continue
 
@@ -94,7 +100,8 @@ def main():
             if len(IDs) == 3:
                 break
             else:
-                showBriefMessage ("Invalid input. Enter three IDs. Please try again...")
+
+                showBriefMessage ("Invalid input. Enter three IDs. - %d - Please try again..." % len(IDs))
                 continue
 
         if (quit):
@@ -107,11 +114,14 @@ def main():
             for index in IDs:
                 game.replaceCardAt(index)
             numSetsShowing = game.findSets()
+            game.updateScore(3)
             game.showCards()
             game.showGameStatus()
             continue
         else:
             showBriefMessage ("That was not a set! Please try again ...")
+            game.updateScore(-1)
+            game.showGameStatus(update=True)
             continue
 
 
