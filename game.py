@@ -138,7 +138,7 @@ class SetGame(object):
 
 
     def drawCards(self, n):
-        while (n > 0):
+        while (n > 0 and len(self.deck) > 0):
             self.showingCards.append(self.deck.pop())
             n -= 1
 
@@ -148,11 +148,13 @@ class SetGame(object):
         self.showingCards[index] = newCard
 
 
-    def showCards(self):
+    def showCards(self, hm=False):
         while (self.numLines):
             self.delete_last_line()
             self.numLines -= 1
 
+        if (hm):
+            return
 
         idealNumInRow = math.ceil(math.sqrt(len(self.showingCards) ) )
         i = 0
@@ -160,6 +162,8 @@ class SetGame(object):
         while (i < numberOfShowingCards):
             self.displayCards(i, min(i+idealNumInRow, numberOfShowingCards-1))
             i += idealNumInRow + 1
+
+
 
     # improve card status design later
     def showGameStatus(self):
@@ -172,14 +176,14 @@ class SetGame(object):
         assert(len(IDs) == 3)
         cardOne, cardTwo, cardThree = self.showingCards[IDs[0]], self.showingCards[IDs[1]], self.showingCards[IDs[2]]
         trip = tuple(sorted([cardOne, cardTwo, cardThree]))
-        self.numLines += 1
         if (trip in self.showingSets):
             return True
 
         return False
 
     def getOneHintSet(self):
-        assert (len(self.showingSets) > 0)
+        if (len(self.showingSets) <= 0):
+            return None
         randomInt = random.randint(0, len(self.showingSets)-1 )
         ret = list(self.showingSets)[randomInt]
         return ret

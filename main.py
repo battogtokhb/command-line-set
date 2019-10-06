@@ -1,16 +1,26 @@
 import sys
 import time
+from colorama import Fore
+from colorama import Style
 from game import SetGame
 
 
 def intro():
-    print ("Welcome to the card game Set. Written by Zaya Battogtokh \n")
-    print ("For a great experience, DO NOT resize your terminal window.")
-    print ("Please read this Wikipedia page for gameplay: https://en.wikipedia.org/wiki/Set_(card_game)")
-    print ("Cards have unique identification numbers.")
-    print ("When promped, please enter the IDs (space delimited) of three cards that form a set.")
-    print ("Enter 'hint' or 'draw [number]' at the prompt to either reveal a set or draw more cards.")
-    print ("Enter 'q' or 'quit' at the prompt to quit the game. Enjoy! \n\n")
+    print ("Welcome to Set. Written by Zaya Battogtokh. \n")
+    print ("The objective is to identify a set of three cards.")
+    print ("Each card has four features: shape, color, number, and shading which each can vary in 3 ways:")
+    print ("Shape: ⬥, ◼, ●  [diamond, square, circle]")
+    print ("Color:" + Fore.RED + " ◼" + Style.RESET_ALL + "," + Fore.GREEN + " ◼" + Style.RESET_ALL + "," + Fore.MAGENTA + " ◼" + Style.RESET_ALL  + " [red, green, purple]")
+    print ("Number: ⬥, ⬥ ⬥, ⬥ ⬥ ⬥ [one, two, three]")
+    print ("Shading: ◼, ◨, □ [filled, half-filled, open]")
+    print ("\nFor each one of the 4 features, 3 cards (a set) must display that feature as either all the same, or all different. \n")
+
+    print ("Cards have unique identification numbers. When promped, enter the IDs (space delimited) of 3 cards that form a set.")
+    print ("Enter 'hint' or 'draw' at the prompt to either reveal a set or draw 3 more cards.")
+    print ("Enter 'q' or 'quit' at the prompt to quit the game. Enjoy! \n")
+
+    print ("For a great experience, DO NOT resize your terminal window.\n\n")
+
 
 def representsInt(s):
     val = None
@@ -30,17 +40,18 @@ def main():
     game.showCards()
     numSetsShowing = game.findSets()
 
-    def showBriefMessage(message):
+    def showBriefMessage(message, length=1.5):
         game.delete_last_line()
         print (message)
-        time.sleep(1.5)
+        time.sleep(length)
         game.delete_last_line()
 
     while (numSetsShowing < 0):
         game = SetGame()
         game.showCards()
+
     game.showGameStatus()
-    while (game.numCardsRemaining() > 0 and numSetsShowing > 0 and quit == False):
+    while (game.numCardsRemaining() > 0 and quit == False):
         validInput = False
         IDs = []
         hintSet = game.getOneHintSet()
@@ -51,13 +62,25 @@ def main():
                 break
 
             if userInput.lower() == "hint":
+                if hintSet is None:
+                    showBriefMessage("No sets can be formed! Please draw more cards.", length=2.5)
+                    continue
                 showBriefMessage(hintSet)
                 continue
 
-            splitWords = userInput.split()
-            # if splitWords[0] == "draw":
-            #     if len(splitWords) > 1:
+            if userInput.lower() == "draw":
+                if (numSetsShowing > 0):
+                    showBriefMessage("Cannot draw more cards when a set exists among existing cards!", length=2.5)
+                    continue
 
+                game.drawCards(3)
+                numSetsShowing = game.findSets()
+                game.delete_last_line()
+                game.showCards(hm=False)
+                game.showGameStatus()
+                continue
+
+            splitWords = userInput.split()
 
             if (len(splitWords) == 3):
                 for word in splitWords:
@@ -65,13 +88,13 @@ def main():
                     if (val is not None and val >= 0 and val < len(game.showingCards)) :
                         IDs.append(val)
             else:
-                showBriefMessage("Invalid input. Please try again ...")
+                showBriefMessage("Invalid input. Please try again...")
                 continue
 
             if len(IDs) == 3:
                 break
             else:
-                showBriefMessage ("Invalid input. Enter three IDs. Please try again ...")
+                showBriefMessage ("Invalid input. Enter three IDs. Please try again...")
                 continue
 
         if (quit):
@@ -90,6 +113,8 @@ def main():
         else:
             showBriefMessage ("That was not a set! Please try again ...")
             continue
+
+
 
 if (__name__ == '__main__'):
     main()
