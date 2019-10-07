@@ -1,5 +1,7 @@
 # Command Line Set
 
+![game screenshot](game-screenshot.png)
+
 ## Overview
 A fun command line implementation of the popular card game Set. 
 
