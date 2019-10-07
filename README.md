@@ -19,7 +19,7 @@ The objective of this single player game is to identify a set of three cards. Ea
 The user is presented with 12 cards initally, and obtains three points for every set found. The user may obtain hints at the cost of one point. And the user may also draw more cards if a set cannot be found in the displayed cards (a point will be deducted if a user attempts to draw more cards when there is at least one existing set). 
 
 
-Please refer to [Wikipedia](https://en.wikipedia.org/wiki/Set) for more detailed instructions.
+Please refer to [Wikipedia](https://en.wikipedia.org/wiki/Set) for more detailed specifics on the gameplay for Set.
 
 ## Design Choices
 Each feature is represented with an enumeration because enums provide immutability and semantic meaning. A card is a class, and we take advantage of the ability to set custom string representations for a class object to display each card in the terminal. A game of set is a class as well and includes functions like displaying the cards to the terminal and drawing cards from the deck. This allows us to easily represent a game in `main.py`.
@@ -30,3 +30,4 @@ Although this calculation may seem time intensive [O(n^2)], it is important to r
 
 ## Dependencies 
 I chose to use Python because it is one of the languages I'm most familiar with. I used the library `colorama` to produce colored terminal text. 	
+
