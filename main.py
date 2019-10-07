@@ -105,7 +105,7 @@ def main():
             if len(IDs) == 3:
                 break
             else:
-                showBriefMessage ("Invalid input. Enter three IDs. - %d , %s - Please try again..." % (len(IDs), IDs) )
+                showBriefMessage ("Invalid input. Enter three IDs. Please try again..." )
                 continue
 
         if (quit):
