@@ -46,8 +46,9 @@ def main():
         time.sleep(length)
         game.delete_last_line()
 
-    while (numSetsShowing < 0):
+    while (numSetsShowing == 0):
         game = SetGame()
+        numSetsShowing = game.findSets()
         game.showCards()
 
     game.showGameStatus()
@@ -79,10 +80,14 @@ def main():
                     showBriefMessage("Cannot draw more cards when a set exists among existing cards!", length=2.5)
                     continue
 
+                if (len(game.deck) == 0):
+                    quit = True
+                    break
+
                 game.drawCards(3)
                 numSetsShowing = game.findSets()
                 game.delete_last_line()
-                game.showCards(hm=False)
+                game.showCards()
                 game.showGameStatus()
                 continue
 
@@ -100,19 +105,23 @@ def main():
             if len(IDs) == 3:
                 break
             else:
-
-                showBriefMessage ("Invalid input. Enter three IDs. - %d - Please try again..." % len(IDs))
+                showBriefMessage ("Invalid input. Enter three IDs. - %d , %s - Please try again..." % (len(IDs), IDs) )
                 continue
 
         if (quit):
-            print ("Thank you for playing. ")
+            print ("Thank you for playing. Your final score is: %d." % game.score )
             break
 
         isSet = game.validateSet(IDs)
         if (isSet):
             showBriefMessage ("Congratulations! That was a set! ")
+            selectedCards = []
             for index in IDs:
-                game.replaceCardAt(index)
+                selectedCards.append(game.showingCards[index])
+
+            for card in selectedCards:
+                game.replaceCard(card)
+
             numSetsShowing = game.findSets()
             game.updateScore(3)
             game.showCards()

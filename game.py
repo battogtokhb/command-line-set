@@ -144,21 +144,20 @@ class SetGame(object):
             self.showingCards.append(self.deck.pop())
             n -= 1
 
-    def replaceCardAt(self, index):
-        assert(index >= 0 and index < len(self.showingCards))
+    def replaceCard(self, card):
+        index = self.showingCards.index(card)
         if (len(self.deck) == 0):
+            self.showingCards.pop(index)
             return
+
         newCard = self.deck.pop()
         self.showingCards[index] = newCard
 
 
-    def showCards(self, hm=False):
+    def showCards(self):
         while (self.numLines):
             self.delete_last_line()
             self.numLines -= 1
-
-        if (hm):
-            return
 
         idealNumInRow = math.ceil(math.sqrt(len(self.showingCards) ) )
         i = 0
