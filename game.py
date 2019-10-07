@@ -144,6 +144,7 @@ class SetGame(object):
             self.showingCards.append(self.deck.pop())
             n -= 1
 
+    # Replace card at index with  new card from deck. If there are no cards remaining in deck, simply remove card.
     def replaceCard(self, card):
         index = self.showingCards.index(card)
         if (len(self.deck) == 0):
@@ -154,6 +155,7 @@ class SetGame(object):
         self.showingCards[index] = newCard
 
 
+    # show cards on terminal
     def showCards(self):
         while (self.numLines):
             self.delete_last_line()
@@ -169,7 +171,7 @@ class SetGame(object):
     def updateScore(self, value):
         self.score += value
 
-    # improve card status design later
+
     def showGameStatus(self, update=False):
         if (update):
             n = 0
@@ -209,6 +211,7 @@ class SetGame(object):
         sys.stdout.write('\x1b[1A')
         # delete last line
         sys.stdout.write('\x1b[2K')
+
 
     def displayCards(self, start, end):
         number = end - start + 1
