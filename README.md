@@ -26,7 +26,7 @@ Each feature is represented with an enumeration because enums provide immutabili
 
 Whenever we change the cards (add or remove cards) displayed to the user, we re-calculate the number of possible sets that can be formed from the displayed cards. For any two cards from the deck, there is exactly one card in the deck which makes a Set with them. For every pair of cards displayed, we figure out which card completes the set and check if the third card exists in the displayed cards. If the third card exists, we have found a possible set. 
 
-Although this calculation may seem time intensive [O(n^2)], it is important to remember that we are limited to 81 cards in the deck. 
+Although this calculation may seem time intensive `O(n^2)`, it is important to remember that we are limited to 81 cards in the deck. 
 
 ## Dependencies 
 I chose to use Python because it is one of the languages I'm most familiar with. I used the library `colorama` to produce colored terminal text. 	
